@@ -1,19 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data
 {
-    public class Fichier
+    public abstract class Fichier
     {
-        public string Nom { get; set; }
-        public DateTime DateCreation { get; set; }
-        public DateTime DateLastModification { get; set; }
+        protected string nom;
+        public string Nom
+        {
+            get { return nom; }
+            set
+            {
+                if (String.IsNullOrWhiteSpace(value)) throw new ArgumentException("Le Nom ne peut pas etre vide.");
+                DateLastModification = DateTime.Now;
+                nom = value;
+            }
+        }
+        public DateTime DateCreation { get;internal protected set; }
+        public DateTime DateLastModification { get;internal protected set; }
         public Fichier(string nom)
         {
-            Nom = nom;
+            this.nom = nom;
             DateCreation = DateTime.Now;
             DateLastModification = DateTime.Now;
         }

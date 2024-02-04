@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Data
 {
-    public class Dossier
+    public class Dossier : Fichier
     {
         private readonly List<Fichier> fichiers = new List<Fichier>();
-        public string Nom { get; set; }
-        public Dossier(string nom)
+        public new string Nom
         {
+            get { return base.Nom; }
+            set
+            {
+                if (String.IsNullOrWhiteSpace(value)) throw new ArgumentException("Le Nom ne peut pas etre vide.");
+                base.Nom = value;
+            }
+        }
+        public Dossier(string nom) : base(nom) {
             Nom = nom;
         }
+
     }
 }
