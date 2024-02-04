@@ -15,6 +15,8 @@ namespace Data
                 nom = value;
             }
         }
+
+        public Fichier Parent { get; internal protected set; }
         public DateTime DateCreation { get;internal protected set; }
         public DateTime DateLastModification { get;internal protected set; }
         public Fichier(string nom)
@@ -23,5 +25,6 @@ namespace Data
             DateCreation = DateTime.Now;
             DateLastModification = DateTime.Now;
         }
+        public abstract void ToString(string prefix="");
     }
 }

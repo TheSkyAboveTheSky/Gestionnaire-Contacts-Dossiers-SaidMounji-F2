@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Data
 {
@@ -60,7 +61,7 @@ namespace Data
             get { return email; }
             set
             {
-                if (String.IsNullOrWhiteSpace(value)) throw new ArgumentException("L'Email ne peut pas etre vide.");
+                if (!new EmailAddressAttribute().IsValid(value)) throw new FormatException($"\"{value}\" n'est pas une adresse e-mail valide."); ;
                 DateLastModification = DateTime.Now;
                 email = value;
             }
@@ -102,6 +103,16 @@ namespace Data
             this.entreprise = entreprise;
             this.sexe = sexe;
             this.relation = relation;
+        }
+        public override void ToString(string prefix = "")
+        {
+            Console.WriteLine($"{prefix}\nContact {Nom} {Prenom} :");
+            Console.WriteLine($"{prefix}  Adresse : {Adresse}");
+            Console.WriteLine($"{prefix}  Telephone : {Telephone}");
+            Console.WriteLine($"{prefix}  Email : {Email}");
+            Console.WriteLine($"{prefix}  Entreprise : {Entreprise}");
+            Console.WriteLine($"{prefix}  Sexe : {Sexe.ToString()}");
+            Console.WriteLine($"{prefix}  Relation : {Relation.ToString()}");
         }
     }
 

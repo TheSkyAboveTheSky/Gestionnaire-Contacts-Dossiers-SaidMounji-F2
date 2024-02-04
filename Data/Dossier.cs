@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 
 namespace Data
 {
@@ -11,12 +13,21 @@ namespace Data
             get { return base.Nom; }
             set
             {
-                if (String.IsNullOrWhiteSpace(value)) throw new ArgumentException("Le Nom ne peut pas etre vide.");
+                if (value.Contains('/') || value.Contains('\\')) throw new FormatException("Le nom du dossier ne peut pas contenir '/' ou '\\'");
+                DateLastModification = DateTime.Now;
                 base.Nom = value;
             }
         }
         public Dossier(string nom) : base(nom) {
             Nom = nom;
+        }
+        public override void ToString(string prefix = "")
+        {
+            Console.WriteLine(prefix + Nom);
+            foreach (Fichier f in fichiers)
+            {
+                f.ToString(prefix + "  ");
+            }
         }
 
     }
