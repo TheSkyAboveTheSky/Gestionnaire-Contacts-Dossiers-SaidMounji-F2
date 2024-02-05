@@ -52,5 +52,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Data\Data.csproj">
+      <Project>{ebc6ff58-5d7e-41d3-be1f-db9d3b1b623a}</Project>
+      <Name>Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Serialize\Serialize.csproj">
+      <Project>{462f38cf-fc10-4499-a010-007b3c183ce3}</Project>
+      <Name>Serialize</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
