@@ -35,8 +35,8 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                 new Commande("charger", "charger [<mot de passe>]", "Charge l'arborescence à partir d'une sauvegarde si elle existe, en utilisant le mot de passe spécifié (facultatif)", Charger),
                 /*
                 new Commande("enregistrer", "enregistrer [<mot de passe>]", "Enregistre l'arborescence, chiffrée en utilisant le mot de passe spécifié (facultatif)", Enregistrer),
-                /*
-                new Commande("cd", "cd [<chemin relatif>]", "Change le répertoire de travail actuel vers celui spécifié, ou vers la racine s'il n'y en a pas", Cd),
+                */
+                new Commande("changerdossier", "changerdossier [<chemin relatif>]", "Change le répertoire de travail actuel vers celui spécifié, ou vers la racine s'il n'y en a pas", ChangerDossier),
                 /*
                 new Commande("pwd", "pwd", "Affiche le chemin absolu du répertoire de travail actuel", Pwd),
                 /*
@@ -257,6 +257,19 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
             return false;
         }
 
-
+        private bool ChangerDossier(string[] args)
+        {
+            if (args.Length > 2) return true;
+            var chemin = args.Length == 1 ? "" : args[1];
+            if (args.Length == 1)
+            {
+                gestionnaire.SetCourantAsRoot();
+            }
+            else if (!gestionnaire.ChangerCourant(chemin))
+            {
+                Console.WriteLine($"Le dossier \"{chemin}\" n'existe pas.");
+            }
+            return false;
+        }
     }
 }
