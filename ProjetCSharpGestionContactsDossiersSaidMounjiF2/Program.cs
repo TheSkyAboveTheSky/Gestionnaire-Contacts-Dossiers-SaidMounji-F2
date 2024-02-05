@@ -29,7 +29,7 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                 new Commande("modifierdossier", "modifierdossier <nom> nom=<nouveau-nom>", "Met à jour un dossier par nom du dossier actuel.", ModifierDossier),
                 /*
                 new Commande("modifiercontact", "modifiercontact <nom> nom=<nouveau-nom> [prenom=<nouveau-prénom>] [adresse=<nouvelle-adresse>] [telephone=<nouveau-numéro-de-téléphone>] [email=<nouvelle-adresse-e-mail>] [entreprise=<nouvelle-entreprise>] [sexe=<nouveau-sexe: homme|femme>] [relation=<nouvelle-relation: ami|famille|collegue|connaissance|autre>]", "Met à jour un contact par nom du dossier actuel.", ModifierContact),
-                /*
+                */
                 new Commande("afficher", "afficher [.]", "Affiche l'arborescence complète.", Afficher),
                 /*
                 new Commande("charger", "charger [<mot de passe>]", "Charge l'arborescence à partir d'une sauvegarde si elle existe, en utilisant le mot de passe spécifié (facultatif)", Charger),
@@ -49,6 +49,7 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
         {
             new Program().Run();
         }
+
         private void Run()
         {
             while (true)
@@ -242,5 +243,20 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
             }
             return false;
         }
+
+        private bool Afficher(string[] args)
+        {
+            if (args.Length > 2) return true;
+            if (args.Length == 2)
+            {
+                if (args[1] != ".") return true;
+                gestionnaire.Courant.ToString();
+            }
+            else gestionnaire.Root.ToString();
+
+            return false;
+        }
+
+
     }
 }
