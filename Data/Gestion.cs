@@ -47,9 +47,9 @@ namespace Data
             courant.AjouterFichier(nouveauDossier);
             courant = nouveauDossier;
         }
-        public void SupprimerDossier(string nom)
+        public bool SupprimerDossier(string nom)
         {
-            courant.SupprimerDossier(nom);
+            return courant.SupprimerDossier(nom);
         }
         // Courant
         public bool ChangerCourant(string path)

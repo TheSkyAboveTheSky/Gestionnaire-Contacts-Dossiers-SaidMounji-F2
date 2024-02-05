@@ -23,7 +23,6 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                 new Commande("aide", "aide [<nom de la commande>]", "Fournit de l'aide pour la commande spécifiée, ou liste les commandes si aucune n'est spécifiée.", Aide),
                 new Commande("ajouterdossier", "ajouterdossier <nom>", "Ajoute un nouveau dossier au dossier actuel", AjouterDossier),
                 new Commande("ajoutercontact", "ajoutercontact <nom> <prenom> <adresse> <numero de telephone> <e-mail> <entreprise> <sexe: homme|femme> <relation: ami|famille|collegue|connaissance|autre>", "Ajoute un nouveau contact au dossier actuel", AjouterContact),
-                /*
                 new Commande("supprimerdossier", "supprimerdossier <nom>", "Supprime un dossier par nom du dossier actuel", SupprimerDossier),
                 /*
                 new Commande("supprimercontact", "supprimercontact <nom>", "Supprime un contact par nom du dossier actuel", SupprimerContact),
@@ -188,6 +187,41 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
             }
             return false;
         }
+
+        private bool SupprimerDossier(string[] args)
+        {
+            if (args.Length != 2) return true;
+            try
+            {
+                var nomDossier = args[1];
+                if (nomDossier == ".")
+                {
+                    gestionnaire.SupprimerCourant();
+                    Console.WriteLine("Dossier courant supprimé avec succès.");
+                }
+                else
+                {
+                    if (gestionnaire.SupprimerDossier(nomDossier))
+                    {
+                        Console.WriteLine($"Dossier \"{nomDossier}\" supprimé avec succès.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Le dossier \"{nomDossier}\" n'existe pas.");
+                    }
+                }
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine($"SupprimerDossier: {e.Message}");
+            }
+            catch (DuplicateNameException e)
+            {
+                Console.WriteLine($"SupprimerDossier: {e.Message}");
+            }
+            return false;
+        }
+
 
     }
 }
