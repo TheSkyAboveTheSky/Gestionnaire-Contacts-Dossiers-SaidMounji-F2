@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Serialize;
+using System;
 using System.Linq;
+using System.IO;
+using System.Security.Principal;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Data
 {
@@ -21,10 +22,14 @@ namespace Data
             }
         }
         public int TryCount { get; private set; } = 3;
-        public Gestion()
+        private readonly Serializer<Storage.Fichier> serializer;
+        private readonly string file;
+
+        public Gestion(SerializerType serializerType = SerializerType.XML)
         {
             Root = new Dossier("root");
             Courant = Root;
+            file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\\{WindowsIdentity.GetCurrent().Name.Split('\\').Last()}.bin";
         }
         // contacts
         public void AjouterContact(string nom,string prenom,string adresse , string telephone , string email , string entreprise , Sexe sexe ,Relation relation)
@@ -63,6 +68,43 @@ namespace Data
                 parent.SupprimerFichier(courant);
                 courant = (Dossier)courant.Parent;
             }
+        }
+        public bool Charger(string key = null)
+        {
+            if (string.IsNullOrWhiteSpace(key)) key = WindowsIdentity.GetCurrent().User.Value;
+            serializer.Key = Encoding.UTF8.GetBytes(key);
+            var r = serializer.Deserialize(file);
+            if (r != null)
+            {
+                TryCount = 3;
+                Root = courant = (Dossier)r.ToObject();
+            }
+            else if (--TryCount <= 0) DeleteSave();
+
+            return r != null;
+        }
+        public bool Save(string key = null)
+        {
+            if (string.IsNullOrWhiteSpace(key)) key = WindowsIdentity.GetCurrent().User.Value;
+
+            serializer.Key = Encoding.UTF8.GetBytes(key);
+            var r = serializer.Serialize(Root.ToStorage(), file);
+
+            if (r) TryCount = 3;
+
+            return r;
+        }
+        public bool DeleteSave()
+        {
+            try
+            {
+                File.Delete(file);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
