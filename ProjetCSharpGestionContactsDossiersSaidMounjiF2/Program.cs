@@ -37,8 +37,7 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                 new Commande("enregistrer", "enregistrer [<mot de passe>]", "Enregistre l'arborescence, chiffrée en utilisant le mot de passe spécifié (facultatif)", Enregistrer),
                 */
                 new Commande("changerdossier", "changerdossier [<chemin relatif>]", "Change le répertoire de travail actuel vers celui spécifié, ou vers la racine s'il n'y en a pas", ChangerDossier),
-                /*
-                new Commande("pwd", "pwd", "Affiche le chemin absolu du répertoire de travail actuel", Pwd),
+                new Commande("afficherchemin", "afficherchemin", "Affiche le chemin absolu du répertoire de travail actuel", AfficherChemin),
                 /*
                 new Commande("sortir", "sortir", "Quitte le programme sans enregistrer.", Sortir),
                 */
@@ -102,7 +101,7 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
             switch (args.Length)
             {
                 case 1:
-                    Console.WriteLine("Commandes disponibles :");
+                    Console.WriteLine("Aide: Commandes disponibles :");
                     foreach (Commande commande in commandes) Console.WriteLine("  " +commande.Nom + ":\t" + commande.Description);
                     break;
                 case 2:
@@ -115,7 +114,7 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                             return false;
                         }
                     }
-                    Console.WriteLine($"Aide : la commande \"{args[1]}\" n'existe pas, tapez \"aide\" pour voir les commandes disponibles");
+                    Console.WriteLine($"Aide: la commande \"{args[1]}\" n'existe pas, tapez \"aide\" pour voir les commandes disponibles");
                     break;
                 default:
                     return true;
@@ -131,7 +130,7 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
             {
                 var nomDossier = args[1];
                 gestionnaire.AjouterDossier(nomDossier);
-                Console.WriteLine($"Dossier \"{nomDossier}\" ajouté avec succès.");
+                Console.WriteLine($"AjouterDossier: Dossier \"{nomDossier}\" ajouté avec succès.");
             }
             catch (FormatException e)
             {
@@ -175,7 +174,7 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                 }
 
                 gestionnaire.AjouterContact(nom, prenom, adresse, telephone, email, entreprise, sexeEnum, relationEnum);
-                Console.WriteLine($"Contact \"{nom}\" ajouté avec succès.");
+                Console.WriteLine($"AjouterContact: Contact \"{nom}\" ajouté avec succès.");
             }
             catch (FormatException e)
             {
@@ -197,17 +196,17 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                 if (nomDossier == ".")
                 {
                     gestionnaire.SupprimerCourant();
-                    Console.WriteLine("Dossier courant supprimé avec succès.");
+                    Console.WriteLine("SupprimerDossier: Dossier courant supprimé avec succès.");
                 }
                 else
                 {
                     if (gestionnaire.SupprimerDossier(nomDossier))
                     {
-                        Console.WriteLine($"Dossier \"{nomDossier}\" supprimé avec succès.");
+                        Console.WriteLine($"SupprimerDossier: Dossier \"{nomDossier}\" supprimé avec succès.");
                     }
                     else
                     {
-                        Console.WriteLine($"Le dossier \"{nomDossier}\" n'existe pas.");
+                        Console.WriteLine($"SupprimerDossier: Le dossier \"{nomDossier}\" n'existe pas.");
                     }
                 }
             }
@@ -230,11 +229,11 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                 var nomContact = args[1];
                 if (gestionnaire.SupprimerContact(nomContact))
                 {
-                    Console.WriteLine($"Contact \"{nomContact}\" supprimé avec succès.");
+                    Console.WriteLine($"SupprimerContact: Contact \"{nomContact}\" supprimé avec succès.");
                 }
                 else
                 {
-                    Console.WriteLine($"Le contact \"{nomContact}\" n'existe pas.");
+                    Console.WriteLine($"SupprimerContact: Le contact \"{nomContact}\" n'existe pas.");
                 }
             }
             catch (Exception e)
@@ -267,9 +266,18 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
             }
             else if (!gestionnaire.ChangerCourant(chemin))
             {
-                Console.WriteLine($"Le dossier \"{chemin}\" n'existe pas.");
+                Console.WriteLine($"ChangerDossier: Le dossier \"{chemin}\" n'existe pas.");
             }
             return false;
         }
+
+        private bool AfficherChemin(string[] args)
+        {
+            if (args.Length != 1) return true;
+            Console.WriteLine($"AfficherChemin: {gestionnaire.Courant.GetPath()}");
+            return false;
+        }
+
+
     }
 }
