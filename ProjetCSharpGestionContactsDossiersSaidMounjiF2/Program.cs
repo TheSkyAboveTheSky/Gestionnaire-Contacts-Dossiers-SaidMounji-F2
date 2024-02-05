@@ -5,6 +5,7 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using static System.Collections.Specialized.BitVector32;
 
 namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
 {
@@ -25,11 +26,8 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                 new Commande("modifierdossier", "modifierdossier <nom> nom=<nouveau-nom>", "Met à jour un dossier par nom du dossier actuel.", ModifierDossier),
                 new Commande("modifiercontact", "modifiercontact <nom> nom=<nouveau-nom> [prenom=<nouveau-prénom>] [adresse=<nouvelle-adresse>] [telephone=<nouveau-numéro-de-téléphone>] [email=<nouvelle-adresse-e-mail>] [entreprise=<nouvelle-entreprise>] [sexe=<nouveau-sexe: homme|femme>] [relation=<nouvelle-relation: ami|famille|collegue|connaissance|autre>]", "Met à jour un contact par nom du dossier actuel.", ModifierContact),
                 new Commande("afficher", "afficher [.]", "Affiche l'arborescence complète.", Afficher),
-                /*
                 new Commande("charger", "charger [<mot de passe>]", "Charge l'arborescence à partir d'une sauvegarde si elle existe, en utilisant le mot de passe spécifié (facultatif)", Charger),
-                /*
                 new Commande("enregistrer", "enregistrer [<mot de passe>]", "Enregistre l'arborescence, chiffrée en utilisant le mot de passe spécifié (facultatif)", Enregistrer),
-                */
                 new Commande("changerdossier", "changerdossier [<chemin relatif>]", "Change le répertoire de travail actuel vers celui spécifié, ou vers la racine s'il n'y en a pas", ChangerDossier),
                 new Commande("afficherchemin", "afficherchemin", "Affiche le chemin absolu du répertoire de travail actuel", AfficherChemin),
                 new Commande("sortir", "sortir", "Quitte le programme sans enregistrer.", Sortir),
@@ -424,6 +422,45 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                         }
                     }
                 }
+            }
+            return false;
+        }
+
+        private bool Charger(string[] args)
+        {
+            if (args.Length > 2) return true;
+            string key = args.Length == 2 ? args[1] : null;
+            try
+            {
+                if(gestionnaire.Charger(key))
+                {
+                    Console.WriteLine($"Charger: L'arborescence a été chargée avec succès.");
+                }
+                else if (gestionnaire.TryCount <=0) Console.WriteLine("$Charger: trop de mots de passe invalides : suppression de la base de données...");
+                else Console.WriteLine($"Charger: échec du chargement : mot de passe invalide, \"{gestionnaire.TryCount}\"/3 tentatives restantes ");
+            }catch(FileNotFoundException e)
+            {
+                Console.WriteLine($"Charger: Aucune sauvegarde n'a été trouvée.");
+            }catch(Exception e)
+            {
+                Console.WriteLine($"Charger: {e.Message}");
+            }
+            return false;
+        }
+
+        private bool Enregistrer(string[] args)
+        {
+            if (args.Length > 2) return true;
+            Console.WriteLine($"Enregistrer: Enregistrement du fichier GestionnaireContactsDossiers.db...");
+            string key = args.Length == 2 ? args[1] : null;
+            try
+            {
+                gestionnaire.Enregistrer(key);
+                Console.WriteLine($"Enregistrer: L'arboresce a été enregistrée avec succès dans C:\\Users\\Geek Store\\Documents\\GestionnaireContactsDossiers.db.");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Enregistrer: {e.Message}");
             }
             return false;
         }

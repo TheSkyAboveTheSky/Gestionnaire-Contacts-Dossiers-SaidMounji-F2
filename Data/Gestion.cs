@@ -27,9 +27,10 @@ namespace Data
 
         public Gestion(SerializerType serializerType = SerializerType.XML)
         {
+            serializer = SerializerFactory.GetSerializer<Storage.Fichier>(serializerType, WindowsIdentity.GetCurrent().User.Value);
             Root = new Dossier("root");
             Courant = Root;
-            file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\\{WindowsIdentity.GetCurrent().Name.Split('\\').Last()}.bin";
+            file = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\\GestionnaireContactsDossiers.db";
         }
         // contacts
         public void AjouterContact(string nom,string prenom,string adresse , string telephone , string email , string entreprise , Sexe sexe ,Relation relation)
@@ -78,12 +79,10 @@ namespace Data
             {
                 TryCount = 3;
                 Root = courant = (Dossier)r.ToObject();
-            }
-            else if (--TryCount <= 0) DeleteSave();
-
-            return r != null;
+            }else if (--TryCount <= 0) { Decharger(); }
+            return r!= null;
         }
-        public bool Save(string key = null)
+        public bool Enregistrer(string key = null)
         {
             if (string.IsNullOrWhiteSpace(key)) key = WindowsIdentity.GetCurrent().User.Value;
 
@@ -94,7 +93,7 @@ namespace Data
 
             return r;
         }
-        public bool DeleteSave()
+        public bool Decharger()
         {
             try
             {
