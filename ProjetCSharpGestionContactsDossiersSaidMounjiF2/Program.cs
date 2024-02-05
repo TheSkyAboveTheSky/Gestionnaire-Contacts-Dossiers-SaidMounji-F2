@@ -1,13 +1,10 @@
-﻿using System;
-using Data;
+﻿using Data;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
-using static System.Collections.Specialized.BitVector32;
 using System.Data;
 using System.Globalization;
+using System.IO;
+using System.Linq;
 
 namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
 {
@@ -26,9 +23,7 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                 new Commande("supprimerdossier", "supprimerdossier <nom>", "Supprime un dossier par nom du dossier actuel", SupprimerDossier),
                 new Commande("supprimercontact", "supprimercontact <nom>", "Supprime un contact par nom du dossier actuel", SupprimerContact),
                 new Commande("modifierdossier", "modifierdossier <nom> nom=<nouveau-nom>", "Met à jour un dossier par nom du dossier actuel.", ModifierDossier),
-                /*
                 new Commande("modifiercontact", "modifiercontact <nom> nom=<nouveau-nom> [prenom=<nouveau-prénom>] [adresse=<nouvelle-adresse>] [telephone=<nouveau-numéro-de-téléphone>] [email=<nouvelle-adresse-e-mail>] [entreprise=<nouvelle-entreprise>] [sexe=<nouveau-sexe: homme|femme>] [relation=<nouvelle-relation: ami|famille|collegue|connaissance|autre>]", "Met à jour un contact par nom du dossier actuel.", ModifierContact),
-                */
                 new Commande("afficher", "afficher [.]", "Affiche l'arborescence complète.", Afficher),
                 /*
                 new Commande("charger", "charger [<mot de passe>]", "Charge l'arborescence à partir d'une sauvegarde si elle existe, en utilisant le mot de passe spécifié (facultatif)", Charger),
@@ -313,6 +308,122 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
             catch (DuplicateNameException e)
             {
                 Console.WriteLine($"ModifierDossier: {e.Message}");
+            }
+            return false;
+        }
+
+        private bool ModifierContact(string[] args)
+        {
+            if (args.Length < 3) return true;
+            else
+            {
+                var nomContact = args[1];
+                var contact = gestionnaire.Courant.GetContact(nomContact);
+                if (contact == null)
+                {
+                    Console.WriteLine($"ModifierContact: Le contact \"{nomContact}\" n'existe pas.");
+                }
+                else
+                {
+                    for(int i=2;i<args.Length; i++)
+                    {
+                        if (!args[i].Contains("="))
+                        {
+                            Console.WriteLine("ModifierContact: syntaxe invalide, tapez \"aide modifiercontact\" pour voir la syntaxe correcte");
+                            return false;
+                        }
+                        string[] parameters = args[i].Split(new char[] { '=' }, 2);
+                        string parameter = parameters[0];
+                        string value = parameters[1];
+                        switch(parameter.ToLower())
+                        {
+                            case "nom":
+                                try
+                                {
+                                    contact.Nom = value;
+                                    Console.WriteLine($"ModifierContact: Le nom du contact  \"{nomContact}\"a été modifié avec succès.");
+                                }catch(ArgumentException e)
+                                {
+                                    Console.WriteLine($"ModifierContact: {e.Message}");
+                                }
+                                break;
+                            case "prenom":
+                                try
+                                {
+                                    contact.Prenom = value;
+                                    Console.WriteLine($"ModifierContact: Le prénom du contact \"{nomContact}\" a été modifié avec succès.");
+                                }
+                                catch (ArgumentException e)
+                                {
+                                    Console.WriteLine($"ModifierContact: {e.Message}");
+                                }
+                                break;
+                            case "adresse":
+                                try
+                                {
+                                    contact.Adresse = value;
+                                    Console.WriteLine($"ModifierContact: L'adresse du contact \"{nomContact}\" a été modifiée avec succès.");
+                                }
+                                catch (ArgumentException e)
+                                {
+                                    Console.WriteLine($"ModifierContact: {e.Message}");
+                                }
+                                break;
+                            case "telephone":
+                                try
+                                {
+                                    contact.Telephone = value;
+                                    Console.WriteLine($"ModifierContact: Le numéro de téléphone du contact \"{nomContact}\" a été modifié avec succès.");
+                                }
+                                catch (ArgumentException e)
+                                {
+                                    Console.WriteLine($"ModifierContact: {e.Message}");
+                                }
+                                break;
+                            case "email":
+                                try
+                                {
+                                    contact.Email = value;
+                                    Console.WriteLine($"ModifierContact: L'adresse e-mail du contact \"{nomContact}\" a été modifiée avec succès.");
+                                }
+                                catch (FormatException)
+                                {
+                                    Console.WriteLine($"ModifierContact: L'adresse e-mail \"{value}\" est invalide.");
+                                }
+                                break;
+                            case "entreprise":
+                                try
+                                {
+                                    contact.Entreprise = value;
+                                    Console.WriteLine($"ModifierContact: L'entreprise du contact \"{nomContact}\" a été modifiée avec succès.");
+                                }
+                                catch (ArgumentException e)
+                                {
+                                    Console.WriteLine($"ModifierContact: {e.Message}");
+                                }
+                                break;
+                            case "sexe":
+                                if (Enum.TryParse(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value), out Sexe sexe))
+                                {
+                                    contact.Sexe = sexe;
+                                    Console.WriteLine($"ModifierContact: Le sexe du contact \"{nomContact}\" a été modifié avec succès.");
+                                }
+                                else Console.WriteLine($"ModifierContact: sexe invalide, tapez \"aide modifiercontact\" pour voir la syntaxe.");
+                                break;
+                            case "relation":
+                                if (Enum.TryParse(CultureInfo.CurrentCulture.TextInfo.ToTitleCase(value), out Relation relation))
+                                {
+                                    contact.Relation = relation;
+                                    Console.WriteLine($"ModifierContact: La relation du contact \"{nomContact}\" a été modifiée avec succès.");
+                                }
+                                else Console.WriteLine($"ModifierContact: relation invalide, tapez \"aide modifiercontact\" pour voir la syntaxe.");
+                                break;
+                            default:
+                                Console.WriteLine($"ModifierContact: paramètre \"{parameter}\" invalide, tapez \"aide modifiercontact\" pour voir la syntaxe.");
+                                break;
+                        }
+                    }
+                }
             }
             return false;
         }
