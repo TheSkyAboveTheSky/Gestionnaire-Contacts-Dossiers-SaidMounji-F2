@@ -38,9 +38,7 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                 */
                 new Commande("changerdossier", "changerdossier [<chemin relatif>]", "Change le répertoire de travail actuel vers celui spécifié, ou vers la racine s'il n'y en a pas", ChangerDossier),
                 new Commande("afficherchemin", "afficherchemin", "Affiche le chemin absolu du répertoire de travail actuel", AfficherChemin),
-                /*
                 new Commande("sortir", "sortir", "Quitte le programme sans enregistrer.", Sortir),
-                */
             };
         }
 
@@ -278,6 +276,10 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
             return false;
         }
 
-
+        private bool Sortir(string[] args)
+        {
+            if (args.Length != 1) return true;
+            throw new Exception("Sortir");
+        }
     }
 }
