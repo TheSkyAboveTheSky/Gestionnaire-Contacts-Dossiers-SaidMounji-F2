@@ -43,11 +43,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Storage.cs" />
     <Compile Include="Gestion.cs" />
     <Compile Include="Fichier.cs" />
     <Compile Include="Dossier.cs" />
     <Compile Include="Contact.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Serialize\Serialize.csproj">
+      <Project>{462f38cf-fc10-4499-a010-007b3c183ce3}</Project>
+      <Name>Serialize</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
