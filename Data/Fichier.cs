@@ -26,5 +26,6 @@ namespace Data
             DateLastModification = DateTime.Now;
         }
         public abstract void ToString(string prefix="");
+        public abstract Storage.Fichier ToStorage();
     }
 }

@@ -16,6 +16,8 @@ namespace Data
             set
             {
                 if (value.Contains('/') || value.Contains('\\')) throw new FormatException("Le nom du dossier ne peut pas contenir '/' ou '\\'");
+                var o = ((Dossier)Parent)?.GetDossier(value);
+                if (o != null && o != this) throw new DuplicateNameException($"Un dossier portant le nom \"{value}\" existe déjà");
                 DateLastModification = DateTime.Now;
                 base.Nom = value;
             }
@@ -137,11 +139,18 @@ namespace Data
         public override void ToString(string prefix = "")
         {
             Console.Write($"{prefix}{Nom}");
-            Console.WriteLine($"\t(création {DateCreation.ToString("G", CultureInfo.CurrentCulture)})");
+            Console.WriteLine($"\t(creation {DateCreation.ToString("G", CultureInfo.CurrentCulture)})");
             prefix += "\t";
             foreach (var c in GetContacts()) c.ToString(prefix);
             foreach (var f in fichiers.Where(fichier => fichier is not Dossier && fichier is not Contact)) f.ToString(prefix);
             foreach (var d in GetDossiers()) d.ToString(prefix);
+        }
+        public override Storage.Fichier ToStorage()
+        {
+            var list = new List<Storage.Fichier>();
+            var storage = new Storage.Dossier(Nom, DateCreation, DateLastModification, list);
+            foreach (var f in fichiers) list.Add(f.ToStorage());
+            return storage;
         }
 
     }

@@ -114,6 +114,10 @@ namespace Data
             Console.WriteLine($"{prefix}  Sexe : {Sexe.ToString()}");
             Console.WriteLine($"{prefix}  Relation : {Relation.ToString()}");
         }
+        public override Storage.Fichier ToStorage()
+        {
+            return new Storage.Contact(Nom, DateCreation, DateLastModification, Prenom, Adresse, Telephone, Email, Entreprise, Sexe,Relation);
+        }
     }
 
 }
