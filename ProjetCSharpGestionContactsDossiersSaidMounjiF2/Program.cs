@@ -25,7 +25,6 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                 new Commande("ajoutercontact", "ajoutercontact <nom> <prenom> <adresse> <numero de telephone> <e-mail> <entreprise> <sexe: homme|femme> <relation: ami|famille|collegue|connaissance|autre>", "Ajoute un nouveau contact au dossier actuel", AjouterContact),
                 new Commande("supprimerdossier", "supprimerdossier <nom>", "Supprime un dossier par nom du dossier actuel", SupprimerDossier),
                 new Commande("supprimercontact", "supprimercontact <nom>", "Supprime un contact par nom du dossier actuel", SupprimerContact),
-                /*
                 new Commande("modifierdossier", "modifierdossier <nom> nom=<nouveau-nom>", "Met à jour un dossier par nom du dossier actuel.", ModifierDossier),
                 /*
                 new Commande("modifiercontact", "modifiercontact <nom> nom=<nouveau-nom> [prenom=<nouveau-prénom>] [adresse=<nouvelle-adresse>] [telephone=<nouveau-numéro-de-téléphone>] [email=<nouvelle-adresse-e-mail>] [entreprise=<nouvelle-entreprise>] [sexe=<nouveau-sexe: homme|femme>] [relation=<nouvelle-relation: ami|famille|collegue|connaissance|autre>]", "Met à jour un contact par nom du dossier actuel.", ModifierContact),
@@ -280,6 +279,42 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
         {
             if (args.Length != 1) return true;
             throw new Exception("Sortir");
+        }
+
+        private bool ModifierDossier(string[] args)
+        {
+            if (args.Length != 3) return true;
+            try
+            {
+                var nomDossier = args[1];
+                var nomChanger = args[2].Split('=')[0];
+                var nouveauNom = args[2].Split('=')[1];
+                if(!nomChanger.Equals("nom", StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("ModifierDossier: syntaxe invalide, tapez \"aide modifierdossier\" pour voir la syntaxe correcte");
+                    return true;
+                }
+                var dossier = gestionnaire.Courant.GetDossier(nomDossier);
+                if (dossier == null)
+                {
+                    Console.WriteLine($"ModifierDossier: Le dossier \"{nomDossier}\" n'existe pas.");
+                }
+                else
+                {
+                    dossier.Nom = nouveauNom;
+                    Console.WriteLine($"ModifierDossier: Le nom du dossier a été modifié avec succès de \"{nomDossier}\" à \"{dossier.Nom}\".");
+                }
+
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine($"ModifierDossier: {e.Message}");
+            }
+            catch (DuplicateNameException e)
+            {
+                Console.WriteLine($"ModifierDossier: {e.Message}");
+            }
+            return false;
         }
     }
 }
