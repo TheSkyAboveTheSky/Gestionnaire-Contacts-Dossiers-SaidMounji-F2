@@ -24,7 +24,6 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
                 new Commande("ajouterdossier", "ajouterdossier <nom>", "Ajoute un nouveau dossier au dossier actuel", AjouterDossier),
                 new Commande("ajoutercontact", "ajoutercontact <nom> <prenom> <adresse> <numero de telephone> <e-mail> <entreprise> <sexe: homme|femme> <relation: ami|famille|collegue|connaissance|autre>", "Ajoute un nouveau contact au dossier actuel", AjouterContact),
                 new Commande("supprimerdossier", "supprimerdossier <nom>", "Supprime un dossier par nom du dossier actuel", SupprimerDossier),
-                /*
                 new Commande("supprimercontact", "supprimercontact <nom>", "Supprime un contact par nom du dossier actuel", SupprimerContact),
                 /*
                 new Commande("modifierdossier", "modifierdossier <nom> nom=<nouveau-nom>", "Met à jour un dossier par nom du dossier actuel.", ModifierDossier),
@@ -222,6 +221,26 @@ namespace ProjetCSharpGestionContactsDossiersSaidMounjiF2
             return false;
         }
 
-
+        private bool SupprimerContact(string[] args)
+        {
+            if (args.Length != 2) return true;
+            try
+            {
+                var nomContact = args[1];
+                if (gestionnaire.SupprimerContact(nomContact))
+                {
+                    Console.WriteLine($"Contact \"{nomContact}\" supprimé avec succès.");
+                }
+                else
+                {
+                    Console.WriteLine($"Le contact \"{nomContact}\" n'existe pas.");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"SupprimerContact: {e.Message}");
+            }
+            return false;
+        }
     }
 }
