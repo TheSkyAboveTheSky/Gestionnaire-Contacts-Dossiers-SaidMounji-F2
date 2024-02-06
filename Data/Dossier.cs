@@ -138,12 +138,16 @@ namespace Data
         }
         public override void ToString(string prefix = "")
         {
-            Console.Write($"{prefix}{Nom}");
-            Console.WriteLine($"\t(creation {DateCreation.ToString("G", CultureInfo.CurrentCulture)})");
+            Console.Write($"{prefix}[D] {Nom}");
+            Console.WriteLine($"\t(creation {DateCreation.ToString("G", CultureInfo.CurrentCulture)}) (Derniere Mise à jour {DateLastModification.ToString("G", CultureInfo.CurrentCulture)})");
             prefix += "\t";
-            foreach (var c in GetContacts()) c.ToString(prefix);
+            foreach (var c in GetContacts()) c.ToString(prefix+"\t");
             foreach (var f in fichiers.Where(fichier => fichier is not Dossier && fichier is not Contact)) f.ToString(prefix);
-            foreach (var d in GetDossiers()) d.ToString(prefix);
+            foreach (var d in GetDossiers())
+            {
+                Console.WriteLine();
+                d.ToString(prefix);
+            }
         }
         public override Storage.Fichier ToStorage()
         {

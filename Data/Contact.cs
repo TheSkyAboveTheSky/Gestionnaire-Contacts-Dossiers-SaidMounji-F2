@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace Data
 {
@@ -106,13 +107,17 @@ namespace Data
         }
         public override void ToString(string prefix = "")
         {
-            Console.WriteLine($"{prefix}\nContact {Nom} {Prenom} :");
-            Console.WriteLine($"{prefix}  Adresse : {Adresse}");
-            Console.WriteLine($"{prefix}  Telephone : {Telephone}");
-            Console.WriteLine($"{prefix}  Email : {Email}");
-            Console.WriteLine($"{prefix}  Entreprise : {Entreprise}");
-            Console.WriteLine($"{prefix}  Sexe : {Sexe.ToString()}");
-            Console.WriteLine($"{prefix}  Relation : {Relation.ToString()}");
+            Console.WriteLine($"{prefix} [C] Contact {Nom} {Prenom} :");
+            prefix += "\t";
+            Console.WriteLine($"{prefix}-Adresse : {Adresse}");
+            Console.WriteLine($"{prefix}-Telephone : {Telephone}");
+            Console.WriteLine($"{prefix}-Email : {Email}");
+            Console.WriteLine($"{prefix}-Entreprise : {Entreprise}");
+            Console.WriteLine($"{prefix}-Sexe : {Sexe.ToString()}");
+            Console.WriteLine($"{prefix}-Relation : {Relation.ToString()}");
+            Console.WriteLine($"{prefix}-Creation {DateCreation.ToString("G", CultureInfo.CurrentCulture)}");
+            Console.WriteLine($"{prefix}-Derniere Mise à jour {DateLastModification.ToString("G", CultureInfo.CurrentCulture)}");
+
         }
         public override Storage.Fichier ToStorage()
         {
