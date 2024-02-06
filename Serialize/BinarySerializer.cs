@@ -6,12 +6,14 @@ using System.Security.Cryptography;
 namespace Serialize
 {
 #pragma warning disable SYSLIB0011
+    // Classe BinarySerializer qui permet de sérialiser et désérialiser des objets en utilisant BinaryFormatter
     internal class BinarySerializer<T> : Serializer<T> where T : class
     {
+        // Constructeur de la classe BinarySerializer qui prend en paramètre la clé et le vecteur d'initialisation
         public BinarySerializer(string key, string iv = null) : base(key, iv) { }
-
+        // Constructeur de la classe BinarySerializer qui prend en paramètre la clé et le vecteur d'initialisation
         public BinarySerializer(byte[] key, byte[] iv = null) : base(key, iv) { }
-
+        // Méthode qui permet de sérialiser un objet
         public override bool Serialize(T obj, string filePath)
         {
             try
@@ -31,7 +33,7 @@ namespace Serialize
                 return false;
             }
         }
-
+        // Méthode qui permet de désérialiser un objet
         public override T Deserialize(string filePath)
         {
             try

@@ -4,6 +4,7 @@ using System.Globalization;
 
 namespace Data
 {
+    // Définition de l'énumération pour la relation (Ami|Famille|Collegue|Connaissance|Autre)
     public enum Relation
     {
         Ami = 0,
@@ -12,13 +13,16 @@ namespace Data
         Connaissance,
         Autre
     }
+    // Définition de l'énumération pour le sexe (Homme|Femme)
     public enum Sexe
     {
         Homme = 0,
         Femme
     }
+    // Classe Contact héritant de Fichier
     public class Contact : Fichier
     {
+        // Propriétés privées (Nom, Prenom, Adresse, Telephone, Email, Entreprise, Sexe, Relation)
         private string prenom;
         private string adresse;
         private string telephone;
@@ -26,7 +30,7 @@ namespace Data
         private string entreprise;
         private Sexe sexe;
         private Relation relation;
-
+        // Propriétés publiques avec la validation (Nom, Prenom, Adresse, Telephone, Email, Entreprise, Sexe, Relation)
         public string Prenom
         {
             get { return prenom; }
@@ -95,6 +99,7 @@ namespace Data
                 relation = value;
             }
         }
+        // Constructeur de la classe Contact Contact(string nom, string prenom, string adresse, string telephone, string email, string entreprise, Sexe sexe, Relation relation)
         public Contact(string nom, string prenom, string adresse, string telephone, string email, string entreprise, Sexe sexe, Relation relation) : base(nom)
         {
             this.prenom = prenom;
@@ -105,6 +110,7 @@ namespace Data
             this.sexe = sexe;
             this.relation = relation;
         }
+        // Méthode ToString(string prefix = "") pour afficher les informations du contact
         public override void ToString(string prefix = "")
         {
             Console.WriteLine($"{prefix} [C] Contact {Nom} {Prenom} :");
@@ -115,10 +121,11 @@ namespace Data
             Console.WriteLine($"{prefix}-Entreprise : {Entreprise}");
             Console.WriteLine($"{prefix}-Sexe : {Sexe.ToString()}");
             Console.WriteLine($"{prefix}-Relation : {Relation.ToString()}");
-            Console.WriteLine($"{prefix}-Creation {DateCreation.ToString("G", CultureInfo.CurrentCulture)}");
-            Console.WriteLine($"{prefix}-Derniere Mise à jour {DateLastModification.ToString("G", CultureInfo.CurrentCulture)}");
+            Console.WriteLine($"{prefix}-Création : {DateCreation.ToString("G", CultureInfo.CurrentCulture)}");
+            Console.WriteLine($"{prefix}-Dernière Mise à jour : {DateLastModification.ToString("G", CultureInfo.CurrentCulture)}");
 
         }
+        // Méthode ToStorage() pour convertir les informations du contact en fichier de stockage
         public override Storage.Fichier ToStorage()
         {
             return new Storage.Contact(Nom, DateCreation, DateLastModification, Prenom, Adresse, Telephone, Email, Entreprise, Sexe,Relation);

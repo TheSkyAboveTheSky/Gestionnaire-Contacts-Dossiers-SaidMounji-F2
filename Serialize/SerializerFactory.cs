@@ -2,14 +2,16 @@
 
 namespace Serialize
 {
+    // Enumération SerializerType qui permet de définir les types de sérialiseurs
     public enum SerializerType
     {
         XML,
         Binary,
     }
-
+    // Classe SerializerFactory qui permet de créer des instances de sérialiseurs
     public static class SerializerFactory
     {
+        // Méthode GetSerializer qui permet de créer une instance de sérialiseur
         public static Serializer<T> GetSerializer<T>(SerializerType type, string key) where T : class
         {
             if (string.IsNullOrEmpty(key))
